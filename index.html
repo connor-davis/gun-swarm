@@ -1,0 +1,76 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gun Swarm</title>
+
+    <link href="https://unpkg.com/tailwindcss@^2/dist/tailwind.min.css" rel="stylesheet">
+</head>
+
+<body>
+    <div class="flex flex-col w-screen h-screen bg-gray-100">
+        <div class="flex justify-between border-b border-gray-200 p-3 flex-none">
+            <div class="text-lg">Gun Swarm</div>
+        </div>
+
+        <div class="flex flex-col w-screen h-full" id="message-list">
+
+        </div>
+
+        <div class="flex w-full h-auto p-2 border-t border-gray-200 flex-none space-x-2">
+            <div class="flex p-2 w-full h-auto bg-gray-200 outline-none rounded-md overflow-y-auto break-words" id="message-input" contenteditable="true"></div>
+
+            <div class="flex justify-center items-center px-4 py-2 bg-blue-600 rounded-md text-white cursor-pointer" onclick="sendMessage();">Send</div>
+        </div>
+    </div>
+
+    <script src="./gun-swarm.js"></script>
+    <script>
+        let messageInput = document.getElementById('message-input');
+        let messageList = document.getElementById('message-list');
+
+        swarmInstance.initialize("camryn<32021");
+
+        let test = gun.get('test');
+
+        test.get('messages').on((data, key) => {
+            let htmlMessage = "";
+
+            for (let i in data) {
+                let message = data[i].toString('utf8');
+                
+                htmlMessage += `<div class="w-full h-auto break-w bg-gray-200">${message}</div>`;
+
+                messageList.innerHTML = htmlMessage;
+            }
+        })
+
+        let sendMessage = () => {
+            test.get('messages').set(messageInput.innerText);
+
+            messageInput.innerText = "";
+        }
+
+        // swarmInstance.receive.subscribe({
+        //     next: ({ data, socket }) => {
+        //         console.log(data);
+
+        //         let message = data.toString('utf8');
+
+        //         messageList.innerHTML += `<div class="w-full h-auto break-words p-2 bg-gray-200">${message.substr(1, message.length - 2)}</div>`;
+        //     }
+        // });
+
+        // let sendMessage = () => {
+        //     swarmInstance.send(messageInput.innerText);
+
+        //     messageList.innerHTML += `<div class="w-full h-auto break-words p-2 bg-gray-200">${messageInput.innerText}</div>`;
+
+        //     messageInput.innerText = "";
+        // }
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,15 @@
+{
+  "name": "gun-swarm",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^0.24.0",
+    "browserify": "^17.0.0",
+    "gun": "^0.2020.1235",
+    "hyperswarm-web": "^2.1.1",
+    "rxjs": "^7.4.0",
+    "sodium-universal": "^3.0.4",
+    "uuid": "^8.3.2"
+  }
+}
