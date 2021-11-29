@@ -34,12 +34,12 @@ swarmInstance.initialize = (key = "global-swarm") => {
 
   console.log(`Joining swarm on key ${keyBuffer.toString("hex")}`);
 
-  swarm.join(keyBuffer, { announce: true });
+  swarm.join(keyBuffer, { announce: true, lookup: true });
 
   console.log("Waiting for connections.");
 
   swarm.on("connection", (socket, details) => {
-    console.log("New connection.");
+    console.log("New connection from " + String.fromCharCode.apply(null, details.peer.host));
 
     console.log(socket);
     console.log(details);
