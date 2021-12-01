@@ -11,7 +11,7 @@
     "browserify": "^17.0.0",
     "gun": "^0.2020.1235",
     "ws": "^8.3.0",
-    "@hyperswarm/dht": "^5.0.10",
+    "@hyperswarm/dht": "^5.0.8",
     "@hyperswarm/dht-relay": "https://github.com/hyperswarm/dht-relay.git",
     "hypercore-crypto": "^3.1.1",
     "uuid": "^8.3.2",
