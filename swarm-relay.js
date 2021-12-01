@@ -22,42 +22,31 @@ let wss = new WebSocketServer({ port: 8080 });
 
     socket.dhtID = v4();
 
+    socket.write(JSON.stringify({ type: "dhtID", data: socket.dhtID }));
+
+    dht.on("out", (packet) => {
+      let { from, data } = JSON.parse(packet);
+      if (from !== socket.dhtID) {
+        console.log(data);
+        return socket.write(JSON.stringify({ type: "out", data }));
+      } else return socket.write(JSON.stringify({ success: "data-out" }));
+    });
+
     socket.on("open", () => {
-      console.log("Opened.");
-
-      console.log(socket.dhtID);
-
-      dht.on("out", (data) =>
-        JSON.parse(data).from !== socket.dhtID
-          ? socket.write(data)
-          : socket.write(JSON.stringify({ success: "data-out" }))
-      );
+      console.log("Opened.", `ID: ${socket.dhtID}`);
 
       socket.on("data", (packet) => {
         try {
           let { type, data } = JSON.parse(packet.toString());
 
-          switch (type) {
-            case "out":
-              dht.emit(
-                "out",
-                JSON.stringify({
-                  from: socket.dhtID,
-                  data: data,
-                })
-              );
-
-              break;
-
-            default:
-              socket.write(
-                JSON.stringify({
-                  error: "Please adhere to the protocol packet specification.",
-                })
-              );
-
-              break;
-          }
+          if (type === "out" && data !== undefined)
+            return dht.emit(
+              "out",
+              JSON.stringify({
+                from: socket.dhtID,
+                data: data,
+              })
+            );
         } catch (error) {}
       });
     });
@@ -72,4 +61,6 @@ let wss = new WebSocketServer({ port: 8080 });
   console.log(server.address().publicKey.toString("hex"));
 
   let relay = Relay.fromTransport(ws, dht, wss);
+
+  console.log(relay.address());
 })();

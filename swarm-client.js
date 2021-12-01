@@ -3,7 +3,7 @@ let ws = require("@hyperswarm/dht-relay/ws");
 let crypto = require("hypercore-crypto");
 let sodium = require("sodium-universal");
 
-let io = new WebSocket(`ws://127.0.0.1:8080`);
+let io = new WebSocket(`ws://localhost:8080`);
 
 let node = Node.fromTransport(ws, io);
 
@@ -31,23 +31,18 @@ socket.on("open", () => {
   console.log("Opened.");
 });
 
-socket.on("data", (data) => {
-  let buffer = Buffer.from(data);
+socket.on("data", (packet) => {
+  let buffer = Buffer.from(packet);
 
   console.log(buffer.toString("utf8"));
 
-  gun._.on("in", JSON.parse(buffer.toString("utf8")).data);
+  let { type, data } = JSON.parse(buffer.toString("utf8"));
+
+  if (type === "out" && data !== undefined) return gun.on("in", data);
 });
 
-gun._.on("out", (data) => socket.write(JSON.stringify({ type: "out", data })));
+gun.on("out", (data) => socket.write(JSON.stringify({ type: "out", data })));
 
-socket.addListener("data", console.log);
-
-socket.on("data", (data) => {
-  let buffer = Buffer.from(data);
-
-  console.log(buffer.toString());
-});
 socket.on("close", () => console.log("Closed."));
 socket.on("finish", () => console.log("Finished."));
 
