@@ -3,6 +3,9 @@
   "version": "1.0.0",
   "main": "index.js",
   "license": "MIT",
+  "scripts": {
+    "start": "node swarm-relay.js"
+  },
   "dependencies": {
     "@hyperswarm/dht": "5.0.0",
     "axios": "^0.24.0",
