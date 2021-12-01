@@ -6,7 +6,7 @@ let crypto = require("hypercore-crypto");
 let { v4 } = require("uuid");
 
 let dht = new DHT();
-let wss = new WebSocketServer({ port: 8080 });
+let wss = new WebSocketServer({ port: process.env.PORT || 8080 });
 
 (async () => {
   await dht.ready();
